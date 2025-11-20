@@ -20,6 +20,7 @@ Throughout COMP2850 we use **people-centred language** (e.g., "person using a sc
 - [ICO (2024). "Guide to Data Protection by Design and Default"](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-re../../references/)
 - `../../references/consent-pii-faq.md` (module ethics guidance)
 - `../../references/privacy-by-design.md` (UK GDPR compliance framework)
+- `../../references/assistive-testing-checklist.md` (module testing guide for Weeks 6-11)
 
 **Recommended**
 - [Microsoft Inclusive Design Toolkit](https://inclusive.microsoft.design/)

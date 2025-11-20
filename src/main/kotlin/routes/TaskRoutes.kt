@@ -10,6 +10,33 @@ import io.pebbletemplates.pebble.PebbleEngine
 import java.io.StringWriter
 
 /**
+ * NOTE FOR NON-INTELLIJ IDEs (VSCode, Eclipse, etc.):
+ * IntelliJ IDEA automatically adds imports as you type. If using a different IDE,
+ * you may need to manually add imports. The commented imports below show what you'll need
+ * for future weeks. Uncomment them as needed when following the lab instructions.
+ *
+ * When using IntelliJ: You can ignore the commented imports below - your IDE will handle them.
+ */
+
+// Week 7+ imports (inline edit, toggle completion):
+// import model.Task               // When Task becomes separate model class
+// import model.ValidationResult   // For validation errors
+// import renderTemplate            // Extension function from Main.kt
+// import isHtmxRequest             // Extension function from Main.kt
+
+// Week 8+ imports (pagination, search, URL encoding):
+// import io.ktor.http.encodeURLParameter  // For query parameter encoding
+// import utils.Page                       // Pagination helper class
+
+// Week 9+ imports (metrics logging, instrumentation):
+// import utils.jsMode              // Detect JS mode (htmx/nojs)
+// import utils.logValidationError  // Log validation failures
+// import utils.timed               // Measure request timing
+
+// Note: Solution repo uses storage.TaskStore instead of data.TaskRepository
+// You may refactor to this in Week 10 for production readiness
+
+/**
  * Week 6 Lab 1: Simple task routes with HTMX progressive enhancement.
  *
  * **Teaching approach**: Start simple, evolve incrementally
@@ -19,27 +46,30 @@ import java.io.StringWriter
  */
 
 fun Route.taskRoutes() {
-    val pebble = PebbleEngine.Builder()
-        .loader(io.pebbletemplates.pebble.loader.ClasspathLoader().apply {
-            prefix = "templates/"
-        })
-        .build()
+    val pebble =
+        PebbleEngine
+            .Builder()
+            .loader(
+                io.pebbletemplates.pebble.loader.ClasspathLoader().apply {
+                    prefix = "templates/"
+                },
+            ).build()
 
     /**
      * Helper: Check if request is from HTMX
      */
-    fun ApplicationCall.isHtmx(): Boolean =
-        request.headers["HX-Request"]?.equals("true", ignoreCase = true) == true
+    fun ApplicationCall.isHtmx(): Boolean = request.headers["HX-Request"]?.equals("true", ignoreCase = true) == true
 
     /**
      * GET /tasks - List all tasks
      * Returns full page (no HTMX differentiation in Week 6)
      */
     get("/tasks") {
-        val model = mapOf(
-            "title" to "Tasks",
-            "tasks" to TaskRepository.all()
-        )
+        val model =
+            mapOf(
+                "title" to "Tasks",
+                "tasks" to TaskRepository.all(),
+            )
         val template = pebble.getTemplate("tasks/index.peb")
         val writer = StringWriter()
         template.evaluate(writer, model)
@@ -62,7 +92,8 @@ fun Route.taskRoutes() {
                 return@post call.respondText(error, ContentType.Text.Html, HttpStatusCode.BadRequest)
             } else {
                 // No-JS: redirect back (could add error query param)
-                return@post call.respondRedirect("/tasks")
+                call.response.headers.append("Location", "/tasks")
+                return@post call.respond(HttpStatusCode.SeeOther)
             }
         }
 
@@ -85,8 +116,9 @@ fun Route.taskRoutes() {
             return@post call.respondText(fragment + status, ContentType.Text.Html, HttpStatusCode.Created)
         }
 
-        // No-JS: POST-Redirect-GET pattern
-        call.respondRedirect("/tasks")
+        // No-JS: POST-Redirect-GET pattern (303 See Other)
+        call.response.headers.append("Location", "/tasks")
+        call.respond(HttpStatusCode.SeeOther)
     }
 
     /**
@@ -104,8 +136,9 @@ fun Route.taskRoutes() {
             return@post call.respondText(status, ContentType.Text.Html)
         }
 
-        // No-JS: POST-Redirect-GET pattern
-        call.respondRedirect("/tasks")
+        // No-JS: POST-Redirect-GET pattern (303 See Other)
+        call.response.headers.append("Location", "/tasks")
+        call.respond(HttpStatusCode.SeeOther)
     }
 
     // TODO: Week 7 Lab 1 Activity 2 Steps 2-5
