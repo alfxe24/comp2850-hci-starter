@@ -4,3 +4,10 @@
 /out/
 .claude/
 COMPILATION-ISSUES.md
+
+# Sensitive data - added from template - removed for now because I have a private GitHub repo.
+#/data/tasks.csv
+#/data/metrics.csv
+#/wk*/research/*notes.md
+#*.log
+
