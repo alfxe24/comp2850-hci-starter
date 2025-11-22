@@ -23,7 +23,7 @@
 **Issue**: Button text (#6c757d) on #0172ad background = 1.11 Contrast (needs 4.5:1)
 **Element**: `<button>Delete</button>` in task list & `<button type="submit">Add Task</button>` in task form.
 **Impact**: Low vision, colour-blind people struggle to read
-**Fix**: Change button colour to #5a6268 (meets 4.53:1)
+**Fix**: Change text colour to white.
 
 ---
 
