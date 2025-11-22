@@ -262,5 +262,5 @@ select:focus {
    Students will discover this with axe DevTools and fix in Week 7 Lab 2 */
 button[type="submit"],
 button {
-  color: #6c757d;
+  color: #ddd;
 }

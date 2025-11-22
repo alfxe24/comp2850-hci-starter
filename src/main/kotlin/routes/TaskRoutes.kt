@@ -103,10 +103,18 @@ fun Route.taskRoutes() {
             // Return HTML fragment for new task
             val fragment = """<li id="task-${task.id}">
                 <span>${task.title}</span>
+                <form action="/tasks/${task.id}/edit" method="post" style="display: inline;"
+                      hx-post="/tasks/${task.id}/edit"
+                      hx-target="#task-${task.id}"
+                      hx-swap="outerHTML"
+                      required aria-describedby="editing task">
+                  <button type="submit" aria-label="Edit task: ${task.title}">Edit</button>
+                </form>
                 <form action="/tasks/${task.id}/delete" method="post" style="display: inline;"
                       hx-post="/tasks/${task.id}/delete"
                       hx-target="#task-${task.id}"
-                      hx-swap="outerHTML">
+                      hx-swap="outerHTML"
+                      required aria-describedby="task deleted">
                   <button type="submit" aria-label="Delete task: ${task.title}">Delete</button>
                 </form>
             </li>"""
@@ -147,4 +155,5 @@ fun Route.taskRoutes() {
     // - GET /tasks/{id}/edit - Show edit form (dual-mode)
     // - POST /tasks/{id}/edit - Save edits with validation (dual-mode)
     // - GET /tasks/{id}/view - Cancel edit (HTMX only)
+    
 }
