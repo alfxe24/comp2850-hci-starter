@@ -98,6 +98,8 @@ object TaskRepository {
 
     // WEEK 7
 
+    fun find(id: Int): Task? = tasks.find { it.id == id }
+    
     fun update(id: Int, newTitle: String): Task? {
         val task = tasks.find { it.id == id } ?: return null
         task.title = newTitle
