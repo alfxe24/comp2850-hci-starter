@@ -81,7 +81,7 @@ fun Route.taskRoutes() {
      * Dual-mode: HTMX fragment or PRG redirect
      */
     post("/tasks") {
-        val title = call.receiveParameters()["title"].orEmpty().trim()
+        val title = call.receiveParameters()["title"] ?: "" // val title = call.receiveParameters()["title"].orEmpty().trim()
 
         if (title.isBlank()) {
             // Validation error handling
@@ -97,7 +97,8 @@ fun Route.taskRoutes() {
             }
         }
 
-        val task = TaskRepository.add(title)
+        val task = Task(title = title) // val task = TaskRepository.add(title)
+        store.add(task)
 
         if (call.isHtmx()) {
             // Return HTML fragment for new task
@@ -134,8 +135,9 @@ fun Route.taskRoutes() {
      * Dual-mode: HTMX empty response or PRG redirect
      */
     post("/tasks/{id}/delete") {
-        val id = call.parameters["id"]?.toIntOrNull()
-        val removed = id?.let { TaskRepository.delete(it) } ?: false
+        val id = call.parameters["id"] ?: return@delete // val id = call.parameters["id"]?.toIntOrNull()
+        // val removed = id?.let { TaskRepository.delete(it) } ?: false
+        val removed = id?.let { store.delete(it) } ?: false
 
         if (call.isHtmx()) {
             val message = if (removed) "Task deleted." else "Could not delete task."
